@@ -28,6 +28,10 @@ class RandomAccessReader(object):
         self._endline = endline_character
         self._lines = self._get_line_data()
 
+    @property
+    def number_of_lines(self):
+        return len(self._lines)
+
     def _get_line_data(self):
         f = open(self._filepath)
         lines = []
@@ -36,15 +40,14 @@ class RandomAccessReader(object):
         current_line = 0
         while has_more:
             current = f.read(1)
-            if current == '':
-                has_more = False
-                continue
 
-            if current == self._endline:
+            if current == self._endline or current == '':
                 # we've reached the end of the current line
                 lines.append({"position": start_position, "length": current_line})
                 start_position += current_line + 1
                 current_line = 0
+                if current == '':
+                    has_more = False
                 continue
 
             current_line += 1

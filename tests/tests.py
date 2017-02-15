@@ -11,6 +11,11 @@ class ReaderTest(unittest.TestCase):
         line = reader.get_line(5)
         self.assertTrue('Learn Tons of Blogging Tips &Tricks' in line)
 
+    def test_line_count(self):
+        path = os.path.dirname(os.path.abspath(__file__)) + "/test_file.csv"
+        reader = RandomAccessReader(path)
+        self.assertTrue(reader.number_of_lines == 34)
+
 
 class CsvReaderTest(unittest.TestCase):
 
