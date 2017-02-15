@@ -1,0 +1,9 @@
+README.rst
+setup.py
+randomAccessReader/__init__.py
+randomAccessReader.egg-info/PKG-INFO
+randomAccessReader.egg-info/SOURCES.txt
+randomAccessReader.egg-info/dependency_links.txt
+randomAccessReader.egg-info/top_level.txt
+randomAccessReader/tests/__init__.py
+randomAccessReader/tests/tests.py
