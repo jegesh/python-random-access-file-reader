@@ -89,8 +89,7 @@ class CsvRandomAccessReader(RandomAccessReader):
         dialect = self.MyDialect(self._endline, self._quotechar, self._delimiter)
         b = StringIO.StringIO(line)
         r = csv.reader(b, dialect)
-        values = []
-        return  tuple(r.next())
+        return tuple(r.next())
 
     def get_line_dict(self, line_number):
         """
