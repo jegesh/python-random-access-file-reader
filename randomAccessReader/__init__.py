@@ -68,4 +68,5 @@ class CsvRandomAccessReader(RandomAccessReader):
         self.headers = None
         self._delimiter = values_delimiter
         if has_header:
+            pass
             
