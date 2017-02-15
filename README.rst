@@ -7,7 +7,7 @@ Random Access File Reader
 
 Installation
 ============
-
+``pip install git+https://github.com/jegesh/python-random-access-file-reader.git#egg=randomAccessReader``
 
 Usage
 =====
@@ -18,14 +18,14 @@ Usage
 | Plain text file example:
 
 ::
-    reader = RandomAccessReader('~/myfile.txt')
-    line = reader.get_line(2)
-    print line
+        reader = RandomAccessReader('~/myfile.txt')
+        line = reader.get_line(2)
+        print line
 
 | Csv example:
 
 ::
-    reader = CsvRandomAccessReader('~/myfile.csv')
-    line = reader.get_line_dict(5)
-    for x in line:
-        print x + " = " line[x]
+        reader = CsvRandomAccessReader('~/myfile.csv')
+        line = reader.get_line_dict(5)
+        for x in line:
+            print x + " = " line[x]
