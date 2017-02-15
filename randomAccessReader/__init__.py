@@ -1,6 +1,6 @@
 """
 General random-access file reader with very small memory overhead
-Inspired by: http://stackoverflow.com/a/35785248/1857802
+Inspired by: http://stackoverflow.com/a/35785248/1857802 and http://stackoverflow.com/a/14999585/1857802
 
 @author: Yaakov Gesher
 """
@@ -9,6 +9,8 @@ Inspired by: http://stackoverflow.com/a/35785248/1857802
 # imports
 # =============
 
+import csv
+import StringIO
 
 # ==========
 # classes
@@ -63,10 +65,55 @@ class RandomAccessReader(object):
 
 class CsvRandomAccessReader(RandomAccessReader):
 
-    def __init__(self, filepath, has_header=True, endline_character='\n', values_delimiter=','):
+    def __init__(self, filepath, has_header=True, endline_character='\n', values_delimiter=',', quotechar='"'):
         super(CsvRandomAccessReader, self).__init__(filepath, endline_character)
-        self.headers = None
+        self._headers = None
         self._delimiter = values_delimiter
+        self._quotechar = quotechar
+        self._has_header = has_header
         if has_header:
-            pass
-            
+            reader = RandomAccessReader(filepath, endline_character)
+            self._headers = self._get_line_values(reader.get_line(0))
+
+    def set_headers(self, header_list):
+        if not hasattr(header_list, '__iter__'):
+            raise TypeError("Argument 'header_list' must contain an iterable")
+        self._headers = tuple(header_list)
+
+    def _get_line_values(self, line):
+        """
+        Splits the csv line into a list of individual values
+        :param line: str
+        :return: tuple of str
+        """
+        dialect = self.MyDialect(self._endline, self._quotechar, self._delimiter)
+        b = StringIO.StringIO(line)
+        r = csv.reader(b, dialect)
+        values = []
+        return  tuple(r.next())
+
+    def get_line_dict(self, line_number):
+        """
+        gets the requested line as a dictionary (header values are the keys)
+        :param line_number: requested line number, 0-indexed (disregards the header line if present)
+        :return: dict
+        """
+        if not self._headers:
+            raise ValueError("Headers must be set before requesting a line dictionary")
+        if self._has_header:
+            line_number += 1
+        return dict(zip(self._headers, self._get_line_values(self.get_line(line_number))))
+
+    class MyDialect(csv.Dialect):
+        strict = True
+        skipinitialspace = True
+        quoting = csv.QUOTE_ALL
+        delimiter = ','
+        quotechar = '"'
+        lineterminator = '\n'
+
+        def __init__(self, terminator, quotechar, delimiter):
+            csv.Dialect.__init__(self)
+            self.delimiter = delimiter
+            self.lineterminator = terminator
+            self.quotechar = quotechar
