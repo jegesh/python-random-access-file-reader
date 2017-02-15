@@ -17,11 +17,11 @@ setup(
     # https://packaging.python.org/en/latest/single_source_version.html
     version='0.1.0',
 
-    description='A simple Python SQS utility package',
+    description='A python random access file reader',
     long_description=long_description,
 
     # The project's main homepage.
-    url='https://github.com/jegesh/python-sqs-listener',
+    url='https://github.com/jegesh/python-random-access-file-reader',
 
     # Author details
     author='Yaakov Gesher',
@@ -51,21 +51,8 @@ setup(
         'Programming Language :: Python :: 3.5',
     ],
 
-    # What does your project relate to?
-    keywords='aws sqs listener and launcher',
-
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
     packages=find_packages(),
-
-    # Alternatively, if you want to distribute just a my_module.py, uncomment
-    # this:
-    #   py_modules=["my_module"],
-
-    # List run-time dependencies here.  These will be installed by pip when
-    # your project is installed. For an analysis of "install_requires" vs pip's
-    # requirements files see:
-    # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['boto3']
 
 )
