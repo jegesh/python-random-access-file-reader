@@ -7,7 +7,7 @@ Random Access File Reader
 
 Installation
 ============
-``pip install git+https://github.com/jegesh/python-random-access-file-reader.git#egg=randomAccessReader``
+``pip install random-access-file-reader``
 
 Usage
 =====
@@ -20,6 +20,8 @@ Usage
 
 ::
 
+    from randomAccessReader import RandomAccessReader
+
     reader = RandomAccessReader('~/myfile.txt')
 
     # single line
@@ -31,10 +33,12 @@ Usage
     for l in lines:
         print l
 
+|
 | Csv example:
 
 ::
 
+    from randomAccessReader import CsvRandomAccessReader
     reader = CsvRandomAccessReader('~/myfile.csv')
 
     # single line

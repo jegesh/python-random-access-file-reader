@@ -99,7 +99,11 @@ class CsvRandomAccessReader(RandomAccessReader):
         dialect = self.MyDialect(self._endline, self._quotechar, self._delimiter)
         b = StringIO.StringIO(line)
         r = csv.reader(b, dialect)
-        return tuple(r.next())
+        values = tuple(r.next())
+        if len(self._headers) != len(values):
+            raise ValueError("Corrupt csv - header and row have different lengths")
+        return values
+
 
     def get_line_dicts(self, line_number, amount=1):
         """
