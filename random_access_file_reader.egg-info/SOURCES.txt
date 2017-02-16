@@ -1,7 +1,0 @@
-README.rst
-setup.py
-randomAccessReader/__init__.py
-random_access_file_reader.egg-info/PKG-INFO
-random_access_file_reader.egg-info/SOURCES.txt
-random_access_file_reader.egg-info/dependency_links.txt
-random_access_file_reader.egg-info/top_level.txt
