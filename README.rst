@@ -15,19 +15,35 @@ Usage
 | Usage is very straightforward, and standard csv line endings (newline character), value delimiter (comma), and
   quotation character (double quote) are the defaults.  These can be changed in the constructor.
 |
+| The ``get_line()`` and ``get_line_dicts()`` methods return a list of rows.
 | Plain text file example:
 
 ::
 
     reader = RandomAccessReader('~/myfile.txt')
-    line = reader.get_line(2)
+
+    # single line
+    line = reader.get_lines(2)[0]
     print line
+
+    # multiple lines
+    lines = reader.get_lines(3, 3)
+    for l in lines:
+        print l
 
 | Csv example:
 
 ::
 
     reader = CsvRandomAccessReader('~/myfile.csv')
-    line = reader.get_line_dict(5)
+
+    # single line
+    line = reader.get_line_dicts(5)[0]
     for x in line:
         print x + " = " line[x]
+
+    # multiple lines
+    lines = reader.get_line_dicts(6, 6)
+    for l in lines:
+        for x in l:
+            print x + " = " l[x]

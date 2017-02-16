@@ -32,6 +32,9 @@ class RandomAccessReader(object):
     def number_of_lines(self):
         return len(self._lines)
 
+    def get_line_indexes(self):
+        return range(len(self._lines))
+
     def _get_line_data(self):
         f = open(self._filepath)
         lines = []
@@ -54,16 +57,20 @@ class RandomAccessReader(object):
         f.close()
         return lines
 
-    def get_line(self, line_number):
+    def get_lines(self, line_number, amount=1):
         """
         get the contents of a given line in the file
         :param line_number: 0-indexed line number
+        :param amount amount of lines to read
         :return: str
         """
+        lines = []
         with open(self._filepath) as f:
-            line_data = self._lines[line_number]
-            f.seek(line_data['position'])
-            return f.read(line_data['length'])
+            for x in xrange(amount):
+                line_data = self._lines[line_number]
+                f.seek(line_data['position'])
+                lines.append(f.read(line_data['length']))
+            return lines
 
 
 class CsvRandomAccessReader(RandomAccessReader):
@@ -76,7 +83,7 @@ class CsvRandomAccessReader(RandomAccessReader):
         self._has_header = has_header
         if has_header:
             reader = RandomAccessReader(filepath, endline_character)
-            self._headers = self._get_line_values(reader.get_line(0))
+            self._headers = self._get_line_values(reader.get_lines(0)[0])
 
     def set_headers(self, header_list):
         if not hasattr(header_list, '__iter__'):
@@ -94,17 +101,22 @@ class CsvRandomAccessReader(RandomAccessReader):
         r = csv.reader(b, dialect)
         return tuple(r.next())
 
-    def get_line_dict(self, line_number):
+    def get_line_dicts(self, line_number, amount=1):
         """
         gets the requested line as a dictionary (header values are the keys)
         :param line_number: requested line number, 0-indexed (disregards the header line if present)
+        :param amount
         :return: dict
         """
         if not self._headers:
             raise ValueError("Headers must be set before requesting a line dictionary")
         if self._has_header:
             line_number += 1
-        return dict(zip(self._headers, self._get_line_values(self.get_line(line_number))))
+        lines = []
+        text_lines = self.get_lines(line_number, amount)
+        for x in xrange(amount):
+            lines.append(dict(zip(self._headers, self._get_line_values(text_lines[x]))))
+        return lines
 
     class MyDialect(csv.Dialect):
         strict = True
