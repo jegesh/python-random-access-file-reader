@@ -80,7 +80,7 @@ class CsvRandomAccessReader(RandomAccessReader):
         self._headers = None
         self._delimiter = values_delimiter
         self._quotechar = quotechar
-        self._has_header = has_header
+        self.has_header = has_header
         if has_header:
             reader = RandomAccessReader(filepath, endline_character)
             self._headers = self._get_line_values(reader.get_lines(0)[0])
@@ -103,7 +103,6 @@ class CsvRandomAccessReader(RandomAccessReader):
         if len(self._headers) != len(values):
             raise ValueError("Corrupt csv - header and row have different lengths")
         return values
-
 
     def get_line_dicts(self, line_number, amount=1):
         """
