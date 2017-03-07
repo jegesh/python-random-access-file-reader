@@ -16,7 +16,8 @@ Usage
   quotation character (double quote) are the defaults.  These can be changed in the constructor.
 |
 | The ``get_line()`` and ``get_line_dicts()`` methods return a list of rows.
-| Plain text file example:
+|
+| **Plain text file example:**
 
 ::
 
@@ -34,11 +35,11 @@ Usage
         print l
 
 | Optional arguments in the constructor:
- - ``endline_character`` - self-explanatory (default is endline character ``\\n``)
- - ``ignore_blank_lines`` - if set to ``True``, blank lines in the file will not be read or indexed (default is ``False``)
+| - ``endline_character`` - self-explanatory (default is endline character ``\\n``)
+| - ``ignore_blank_lines`` - if set to ``True``, blank lines in the file will not be read or indexed (default is ``False``)
 
 |
-| Csv example:
+| **Csv example:**
 
 ::
 
