@@ -36,7 +36,7 @@ Usage
 
 | Optional arguments in the constructor:
 
-- ``endline_character`` - self-explanatory (default is endline character ``\\n``)
+- ``endline_character`` - self-explanatory (default is endline character ``\n``)
 - ``ignore_blank_lines`` - if set to ``True``, blank lines in the file will not be read or indexed (default is ``False``)
 
 |
@@ -59,8 +59,9 @@ Usage
             print x + " = " l[x]
 
 | Optional arguments in the constructor:
- - ``endline_character`` - self-explanatory (default is endline character ``\\n``)
- - ``ignore_blank_lines`` - if set to ``True``, blank lines in the file will not be read or indexed (default is ``True``)
- - ``values_delimiter`` - character used by the csv to separate values within a line (default is ``,``)
- - ``quotechar`` - character used by the csv to surround values that contain the value delimiting character (default is ``"``)
- - ``ignore_corrupt`` - if set to ``True``, lines with an invalid length will return blank instead of raising an exception (default is ``False``)
+
+- ``endline_character`` - self-explanatory (default is endline character ``\n``)
+- ``ignore_blank_lines`` - if set to ``True``, blank lines in the file will not be read or indexed (default is ``True``)
+- ``values_delimiter`` - character used by the csv to separate values within a line (default is ``,``)
+- ``quotechar`` - character used by the csv to surround values that contain the value delimiting character (default is ``"``)
+- ``ignore_corrupt`` - if set to ``True``, lines with an invalid length will return blank instead of raising an exception (default is ``False``)
