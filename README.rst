@@ -35,8 +35,8 @@ Usage
         print l
 
 | Optional arguments in the constructor:
-|   - ``endline_character`` - self-explanatory (default is endline character ``\\n``)
-|   - ``ignore_blank_lines`` - if set to ``True``, blank lines in the file will not be read or indexed (default is ``False``)
+   - ``endline_character`` - self-explanatory (default is endline character ``\\n``)
+   - ``ignore_blank_lines`` - if set to ``True``, blank lines in the file will not be read or indexed (default is ``False``)
 
 |
 | **Csv example:**
