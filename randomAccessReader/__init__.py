@@ -82,8 +82,15 @@ class CsvRandomAccessReader(RandomAccessReader):
         self._quotechar = quotechar
         self.has_header = has_header
         if has_header:
-            reader = RandomAccessReader(filepath, endline_character)
-            self._headers = self._get_line_values(reader.get_lines(0)[0])
+            dialect = self.MyDialect(self._endline, self._quotechar, self._delimiter)
+            b = StringIO.StringIO(self.get_lines(0)[0])
+            r = csv.reader(b, dialect)
+            values = tuple(r.next())
+            self._headers = values
+
+    @property
+    def headers(self):
+        return self._headers
 
     def set_headers(self, header_list):
         if not hasattr(header_list, '__iter__'):
@@ -113,7 +120,7 @@ class CsvRandomAccessReader(RandomAccessReader):
         """
         if not self._headers:
             raise ValueError("Headers must be set before requesting a line dictionary")
-        if self._has_header:
+        if self.has_header:
             line_number += 1
         lines = []
         text_lines = self.get_lines(line_number, amount)
