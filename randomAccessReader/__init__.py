@@ -19,13 +19,14 @@ import StringIO
 
 class RandomAccessReader(object):
 
-    def __init__(self, filepath, endline_character='\n'):
+    def __init__(self, filepath, endline_character='\n', ignore_blank_lines=False):
         """
         :param filepath:  Absolute path to file
         :param endline_character: Delimiter for lines. Defaults to newline character (\n)
         """
         self._filepath = filepath
         self._endline = endline_character
+        self._ignore_blanks = ignore_blank_lines
         self._lines = self._get_line_data()
 
     @property
@@ -46,7 +47,8 @@ class RandomAccessReader(object):
 
             if current == self._endline or current == '':
                 # we've reached the end of the current line
-                lines.append({"position": start_position, "length": current_line})
+                if not self._ignore_blanks or current_line > 0:
+                    lines.append({"position": start_position, "length": current_line})
                 start_position += current_line + 1
                 current_line = 0
                 if current == '':
@@ -75,11 +77,18 @@ class RandomAccessReader(object):
 
 class CsvRandomAccessReader(RandomAccessReader):
 
-    def __init__(self, filepath, has_header=True, endline_character='\n', values_delimiter=',', quotechar='"'):
-        super(CsvRandomAccessReader, self).__init__(filepath, endline_character)
+    def __init__(self, filepath, has_header=True, **kwargs):
+        """
+
+        :param filepath:
+        :param has_header:
+        :param kwargs: endline_character='\n', values_delimiter=',', quotechar='"', ignore_corrupt=False, ignore_blank_lines=True
+        """
+        super(CsvRandomAccessReader, self).__init__(filepath, kwargs.get('endline_character','\n'), kwargs.get('ignore_blank_lines', True))
         self._headers = None
-        self._delimiter = values_delimiter
-        self._quotechar = quotechar
+        self._delimiter = kwargs.get('values_delimiter', ',')
+        self._quotechar = kwargs.get('quotechar', '"')
+        self._ignore_bad_lines = kwargs.get('ignore_corrupt', False)
         self.has_header = has_header
         if has_header:
             dialect = self.MyDialect(self._endline, self._quotechar, self._delimiter)
@@ -108,7 +117,9 @@ class CsvRandomAccessReader(RandomAccessReader):
         r = csv.reader(b, dialect)
         values = tuple(r.next())
         if len(self._headers) != len(values):
-            raise ValueError("Corrupt csv - header and row have different lengths")
+            if not self._ignore_bad_lines:
+                raise ValueError("Corrupt csv - header and row have different lengths")
+            return None
         return values
 
     def get_line_dicts(self, line_number, amount=1):
@@ -125,7 +136,11 @@ class CsvRandomAccessReader(RandomAccessReader):
         lines = []
         text_lines = self.get_lines(line_number, amount)
         for x in xrange(amount):
-            lines.append(dict(zip(self._headers, self._get_line_values(text_lines[x]))))
+            vals = self._get_line_values(text_lines[x])
+            if vals is None:
+                lines.append(dict(zip(self._headers, range(len(self._headers)))))
+            else:
+                lines.append(dict(zip(self._headers, vals)))
         return lines
 
     class MyDialect(csv.Dialect):
