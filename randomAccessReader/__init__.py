@@ -10,7 +10,7 @@ Inspired by: http://stackoverflow.com/a/35785248/1857802 and http://stackoverflo
 # =============
 
 import csv
-import StringIO
+from io import StringIO
 
 # ==========
 # classes
@@ -68,7 +68,7 @@ class RandomAccessReader(object):
         """
         lines = []
         with open(self._filepath) as f:
-            for x in xrange(amount):
+            for x in range(amount):
                 line_data = self._lines[line_number]
                 f.seek(line_data['position'])
                 lines.append(f.read(line_data['length']))
@@ -84,7 +84,8 @@ class CsvRandomAccessReader(RandomAccessReader):
         :param has_header:
         :param kwargs: endline_character='\n', values_delimiter=',', quotechar='"', ignore_corrupt=False, ignore_blank_lines=True
         """
-        super(CsvRandomAccessReader, self).__init__(filepath, kwargs.get('endline_character','\n'), kwargs.get('ignore_blank_lines', True))
+        super(CsvRandomAccessReader, self).__init__(filepath, kwargs.get('endline_character', '\n'),
+                                                    kwargs.get('ignore_blank_lines', True))
         self._headers = None
         self._delimiter = kwargs.get('values_delimiter', ',')
         self._quotechar = kwargs.get('quotechar', '"')
@@ -92,9 +93,9 @@ class CsvRandomAccessReader(RandomAccessReader):
         self.has_header = has_header
         if has_header:
             dialect = self.MyDialect(self._endline, self._quotechar, self._delimiter)
-            b = StringIO.StringIO(self.get_lines(0)[0])
+            b = StringIO(self.get_lines(0)[0])
             r = csv.reader(b, dialect)
-            values = tuple(r.next())
+            values = tuple(next(r))
             self._headers = values
 
     @property
@@ -113,9 +114,9 @@ class CsvRandomAccessReader(RandomAccessReader):
         :return: tuple of str
         """
         dialect = self.MyDialect(self._endline, self._quotechar, self._delimiter)
-        b = StringIO.StringIO(line)
+        b = StringIO(line)
         r = csv.reader(b, dialect)
-        values = tuple(r.next())
+        values = tuple(next(r))
         if len(self._headers) != len(values):
             if not self._ignore_bad_lines:
                 raise ValueError("Corrupt csv - header and row have different lengths")
@@ -135,10 +136,10 @@ class CsvRandomAccessReader(RandomAccessReader):
             line_number += 1
         lines = []
         text_lines = self.get_lines(line_number, amount)
-        for x in xrange(amount):
+        for x in range(amount):
             vals = self._get_line_values(text_lines[x])
             if vals is None:
-                lines.append(dict(zip(self._headers, range(len(self._headers)))))
+                lines.append(dict(zip(self._headers, list(range(len(self._headers))))))
             else:
                 lines.append(dict(zip(self._headers, vals)))
         return lines
