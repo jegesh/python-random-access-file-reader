@@ -3,3 +3,5 @@
 build
 dist
 random_access_file_reader.egg-info
+*.pyc
+venv/

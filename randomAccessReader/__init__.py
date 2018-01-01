@@ -11,6 +11,7 @@ Inspired by: http://stackoverflow.com/a/35785248/1857802 and http://stackoverflo
 
 import csv
 from io import StringIO
+import six
 
 # ==========
 # classes
@@ -71,7 +72,7 @@ class RandomAccessReader(object):
             for x in range(amount):
                 line_data = self._lines[line_number]
                 f.seek(line_data['position'])
-                lines.append(f.read(line_data['length']))
+                lines.append(six.u(f.read(line_data['length'])))
             return lines
 
 
