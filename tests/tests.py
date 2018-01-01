@@ -45,3 +45,7 @@ class CsvReaderTest(unittest.TestCase):
         reader = CsvRandomAccessReader(path, ignore_corrupt=True)
         corrupt_lines = reader.get_line_dicts(0,8)
         self.assertEqual(len(corrupt_lines), 8)
+
+
+if __name__ == '__main__':
+    unittest.main()
