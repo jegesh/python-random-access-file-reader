@@ -10,7 +10,10 @@ Inspired by: http://stackoverflow.com/a/35785248/1857802 and http://stackoverflo
 # =============
 
 import csv
-from io import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 import six
 
 # ==========
